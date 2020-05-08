@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace指定mapper接口文件名称空间 -->
+<mapper namespace="com.hopu.mapper.UserMapepr">
+
+    <select id="findAll" resultMap="userWithRole">
+       select * from t_user
+        <where>
+            <if test="userName!=null and userName!=''">
+                userName=#{userName}
+            </if>
+            <if test="roleId !=null">
+                and userRole=#{roleId}
+            </if>
+        </where>
+        limit #{index},#{size};
+    </select>
+    <resultMap id="userWithRole" type="user">
+        <!-- 其他的自动映射 -->
+        <association property="role" column="userRole" javaType="role" select="com.hopu.mapper.RoleMapper.findRoleById" />
+    </resultMap>
+
+    <select id="findTotlCount" resultType="int">
+       select count(*) from t_user
+       <where>
+           <if test="userName!=null and userName!=''">
+                userName=#{userName}
+           </if>
+           <if test="roleId!=null and roleId!=''">
+                and userRole=#{roleId}
+           </if>
+       </where>
+    </select>
+
+    <select id="add">
+        insert into t_user(userCode,userName,userPassword,gender,birthday,phone,address,userRole,createdBy,creationDate,modifyBy,modifyDate)
+        values(#{userCode},#{userName},#{userPassword},#{gender},#{birthday},#{phone},#{address},#{role.id},#{createdBy},now(),#{modifyBy},now())
+    </select>
+</mapper>

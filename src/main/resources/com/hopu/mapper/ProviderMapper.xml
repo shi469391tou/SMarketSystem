@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace指定mapper接口文件名称空间 -->
+<mapper namespace="com.hopu.mapper.ProviderMapper">
+
+    <select id="findTotlCount" resultType="int">
+        SELECT count(*) FROM t_provider
+    </select>
+
+    <select id="findAll" resultType="provider">
+        SELECT * FROM t_provider
+        <where>
+            <if test="proCode!=null and proCode!=''">
+                proCode like concat("%",#{proCode},"%")
+            </if>
+            <if test="proName!=null and proName!=''">
+                and proName like concat("%",#{proName},"%")
+            </if>
+        </where>
+    </select>
+    <select id="save">
+        insert into t_provider(proCode,proName,proDesc,proContact,proPhone,proAddress,proFax,createdBy,creationDate,modifyBy,modifyDate)
+        values(#{proCode},#{proName},#{proDesc},#{proContact},#{proPhone},#{proAddress},#{proFax},#{createdBy},now(),#{modifyBy},now())
+    </select>
+
+    <update id="update">
+        update t_provider
+        <set>
+            <if test="proContact!=null and proContact!=''">
+                proContact =#{proContact},
+            </if>
+            <if test="proPhone!=null and proPhone!=''">
+                proPhone =#{proPhone},
+            </if>
+            <if test="proAddress!=null and proAddress!=''">
+                proAddress =#{proAddress},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+</mapper>

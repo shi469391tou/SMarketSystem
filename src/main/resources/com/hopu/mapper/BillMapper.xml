@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace指定mapper接口文件名称空间 -->
+<mapper namespace="com.hopu.mapper.BillMapper">
+
+    <select id="findAll" resultMap="billWithProvider">
+        SELECT * FROM t_bill
+        <where>
+            <if test="productName!=null and productName!=''">
+                productName like concat("%",#{productName},"%")
+            </if>
+            <if test="provider_id!=null">
+                and providerId =#{provider_id}
+            </if>
+            <if test="isPayment!=null">
+                and isPayment =#{isPayment}
+            </if>
+        </where>
+    </select>
+    <resultMap id="billWithProvider" type="bill">
+          <!--  其他的可以省略-->
+           <association property="provider" column="providerId" javaType="provider" select="com.hopu.mapper.ProviderMapper.findById" />
+    </resultMap>
+
+    <select id="save">
+        insert into t_bill(billCode,productName,productDesc,productUnit,productCount,totalPrice,isPayment,createdBy,creationDate,modifyBy,modifyDate,providerId)
+        values(#{billCode},#{productName},#{productDesc},#{productUnit},#{productCount},#{totalPrice},#{isPayment},#{createdBy},now(),#{modifyBy},now(),#{provider.id})
+    </select>
+</mapper>
