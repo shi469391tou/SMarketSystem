@@ -15,7 +15,7 @@
 <header class="publicHeader">
     <h1>超市订单管理系统</h1>
     <div class="publicHeaderR">
-        <p><span><span>${login_user.userName}</span>先生/女士,下午好！</span><span style="color: #fff21b"> </span> , 欢迎你！</p>
+        <p><span><span>${login_user.userName}</span>先生/女士222,下午好！</span><span style="color: #fff21b"> </span> , 欢迎你！</p>
         <a href="${pageContext.request.contextPath}/user/logout">退出</a>
     </div>
 </header>
